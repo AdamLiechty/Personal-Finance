@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <link rel="stylesheet" href="css/mortgage.css">
+  </head>
+  <body>
+    <svg id="chart">
+      <g id="rects"></g>
+      <text id="details" x="15" y="20" dy="0"></text>
+    </svg>
+    <div>
+      <label>Principal: </label><input class="mortVar" id="minPrincipal" type="number" />-<input class="mortVar" id="maxPrincipal" type="number" />
+    </div>
+    <div>
+      <label>Rate: </label><input class="mortVar" id="minRate" type="number" />-<input class="mortVar" id="maxRate" type="number" />
+    </div>
+    <script src="js/mortgage.js"></script>
+  </body>
+</html>

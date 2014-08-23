@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  color: black;
+  font-family: verdana;
+}
+
+rect {
+  stroke: #fff;
+  stroke-width: .1px;
+}
+
+#details {
+  font-size: 14px;
+}
