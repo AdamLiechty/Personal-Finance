@@ -6,12 +6,17 @@
     <link rel="stylesheet" href="css/mortgage.css">
   </head>
   <body>
-    <svg id="chart">
-      <g id="rects"></g>
-      <text id="details" x="15" y="20" dy="0"></text>
-    </svg>
-    <span id="stackedBar"></span>
+    <div>
+      <svg id="chart">
+        <g id="rects"></g>
+        <text id="details" x="15" y="20" dy="0"></text>
+      </svg>
+      <span id="stackedBar"></span>
+    </div>
     <div id="vars">
+      <div>Principal is amount after down payment.</div>
+      <div>A $200k house with a 20% down payment</div>
+      <div>has a mortgage with a $160k principal</div>
       <div>
         <label>Principal: </label><input class="mortVar" id="minPrincipal" type="number" />-<input class="mortVar" id="maxPrincipal" type="number" />
       </div>
