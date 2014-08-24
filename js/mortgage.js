@@ -17,8 +17,8 @@ var w = 400,
 
 var minPrincipal = 0, maxPrincipal = 1000000;
 var minRate = 0.03,   maxRate = 0.07;
-var months = 360;
-var maxPayment = getPayment(maxPrincipal, maxRate, months);
+var termYears = 30;
+var maxPayment = getPayment(maxPrincipal, maxRate, termYears * 12);
 var minPayment = 0;
 var detailsWidth = 80;
 var detailsMargin = 5;
@@ -40,10 +40,13 @@ d3.select("#minRate").attr("value", (minRate * 100).toFixed(2))
   .on("input", function() { minRate = parseFloat(this.value) / 100; onChange(); })
 d3.select("#maxRate").attr("value", (maxRate * 100).toFixed(2))
   .on("input", function() { maxRate = parseFloat(this.value) / 100; onChange(); })
+d3.select("#term").attr("value", termYears)
+  .on("input", function() { termYears = parseInt(this.value); onChange(); })
 
 var stackedBar = new StackedBar("#stackedBar", {
   keyName: "month",
-  yLabel: "Amortization",
+  xLabel: "Month",
+  yLabel: "Payment",
   sort: false,
   x: w + detailsMargin + detailsWidth,
   y: 0,
@@ -72,7 +75,7 @@ draw();
 function fill(d) {
   var principal = getPrincipal(d);
   var rate = getRate(d);
-  var payment = getPayment(principal, rate, months)
+  var payment = getPayment(principal, rate, termYears * 12)
   return d3.hsl(120, 1, 1 - payment / maxPayment);
 }
 
@@ -94,7 +97,7 @@ function getDetails(d) {
   var rate = getRate(d);
   return "$" + principal.toFixed(2) +
     " @" + (rate*100).toFixed(2) + "% $" +
-    getPayment(principal, rate, months).toFixed(0) + "/mo"
+    getPayment(principal, rate, termYears * 12).toFixed(0) + "/mo"
 }
 
 function getPrincipal(d) {
@@ -113,8 +116,8 @@ function mouseover(d) {
   // amoritation chart
   var amort = [];
   var principalRemaining = getPrincipal(d), rate = getRate(d);
-  var payment = getPayment(principalRemaining, rate, months);
-  for (var i = 0; i < months; ++i) {
+  var payment = getPayment(principalRemaining, rate, termYears * 12);
+  for (var i = 0; i < termYears * 12; ++i) {
     var interest = rate / 12 * principalRemaining;
     amort[i] = {
       month: i + 1,
@@ -127,8 +130,8 @@ function mouseover(d) {
 }
 
 function onChange() {
-  minPayment = getPayment(minPrincipal, minRate, months);
-  maxPayment = getPayment(maxPrincipal, maxRate, months);
+  minPayment = getPayment(minPrincipal, minRate, termYears * 12);
+  maxPayment = getPayment(maxPrincipal, maxRate, termYears * 12);
   draw();
 }
 

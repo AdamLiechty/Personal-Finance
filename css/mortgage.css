@@ -1,7 +1,7 @@
 body {
   margin: 0;
   color: black;
-  font: 10px sans-serif;
+  font: 12px sans-serif;
 }
 
 rect {
@@ -9,7 +9,7 @@ rect {
   stroke-width: .1px;
 }
 
-#details {
+#details, #vars {
   font-size: 14px;
 }
 
@@ -27,4 +27,14 @@ rect {
 
 .x.axis path {
   display: none;
+}
+
+#attrib {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: gray;
+}
+#attrib a {
+  color: gray;
 }

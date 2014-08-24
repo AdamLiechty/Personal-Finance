@@ -16,11 +16,6 @@ function StackedBar(selector, options) {
     var color = d3.scale.ordinal()
         .range(["#5555cc", "#bb2222", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .tickValues(d3.range(1,31).map(function(i){return i * 12;}))
-        .orient("bottom");
-
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
@@ -48,32 +43,46 @@ function StackedBar(selector, options) {
 
       svg.selectAll(".axis").remove();
 
+      var xAxis = d3.svg.axis()
+          .scale(x)
+          .tickValues(d3.range(1,termYears + 1).map(function(i){return i * 12;}))
+          .orient("bottom");
+
       svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
+          .call(xAxis)
+        .append("text")
+          .attr("x", 10)
+          .attr("y", 0)
+          .attr("dy", "1.5em")
+          .style("text-anchor", "end")
+          .text(options.xLabel);
 
       svg.append("g")
           .attr("class", "y axis")
           .call(yAxis)
         .append("text")
           .attr("transform", "rotate(-90)")
+          .attr("x", -6)
           .attr("y", 6)
           .attr("dy", ".71em")
           .style("text-anchor", "end")
           .text(options.yLabel);
 
       var sbItems = svg.selectAll(".sbItem")
-          .data(data)
-          .attr("transform", sbItemTransform)
-        .enter().append("g")
+          .data(data);
+      sbItems.attr("transform", sbItemTransform)
+      sbItems.enter().append("g")
           .attr("class", "sbItem")
-          .attr("transform", sbItemTransform);
+          .attr("transform", sbItemTransform)
+      sbItems.exit().remove();
 
       var sbItemRects = sbItems.selectAll("rect")
           .data(function(d) { return d.stack; });
       sbItemRectStyle(sbItemRects);
       sbItemRectStyle(sbItemRects.enter().append("rect"));
+      sbItemRects.exit().remove();
 
       var legend = svg.selectAll(".legend")
           .data(color.domain().slice().reverse())
