@@ -24,9 +24,21 @@ var detailsWidth = 80;
 var detailsMargin = 5;
 var rects;
 
-d3.select("#chart")
+var chart = d3.select("#chart")
   .attr("width", w + detailsWidth + detailsMargin)
-  .attr("height", h);
+  .attr("height", h + 20);
+chart.append("text")
+  .attr("x", w)
+  .attr("y", h)
+  .attr("dy", "1em")
+  .style("text-anchor", "end")
+  .text("Principal");
+chart.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("x", -h)
+  .attr("y", w)
+  .attr("dy", "1em")
+  .text("APR");
 
 d3.select("#details")
   .attr("x", w + detailsMargin)

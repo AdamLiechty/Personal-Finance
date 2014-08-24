@@ -13,6 +13,10 @@ rect {
   font-size: 14px;
 }
 
+#vars {
+  margin: 5px 15px;
+}
+
 /* Charting */
 .axis path,
 .axis line {
@@ -27,6 +31,11 @@ rect {
 
 .x.axis path {
   display: none;
+}
+
+#bible a {
+  margin: 15px;
+  color: gray;
 }
 
 #attrib {
