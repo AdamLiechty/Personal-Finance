@@ -1,7 +1,7 @@
 body {
   margin: 0;
   color: black;
-  font-family: verdana;
+  font: 10px sans-serif;
 }
 
 rect {
@@ -11,4 +11,20 @@ rect {
 
 #details {
   font-size: 14px;
+}
+
+/* Charting */
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
 }

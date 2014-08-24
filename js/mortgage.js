@@ -1,3 +1,14 @@
+var _window = (function() {
+  var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName("body")[0];
+  return {
+    width: w.innerWidth || e.clientWidth || g.clientWidth,
+    height: w.innerHeight || e.clientHeight || g.clientHeight
+  };
+})();
+
 var w = 400,
     h = 400,
     z = 5,
@@ -5,12 +16,12 @@ var w = 400,
     y = h / z;
 
 var minPrincipal = 0, maxPrincipal = 1000000;
-var minRate = 0.03, maxRate = 0.07;
+var minRate = 0.03,   maxRate = 0.07;
 var months = 360;
 var maxPayment = getPayment(maxPrincipal, maxRate, months);
 var minPayment = 0;
-var detailsWidth = 100;
-var detailsMargin = 15;
+var detailsWidth = 80;
+var detailsMargin = 5;
 var rects;
 
 d3.select("#chart")
@@ -19,7 +30,7 @@ d3.select("#chart")
 
 d3.select("#details")
   .attr("x", w + detailsMargin)
-  .attr("y", detailsMargin)
+  .attr("y", detailsMargin + 10)
 
 d3.select("#minPrincipal").attr("value", minPrincipal)
   .on("input", function() { minPrincipal = parseInt(this.value); onChange(); })
@@ -29,6 +40,17 @@ d3.select("#minRate").attr("value", (minRate * 100).toFixed(2))
   .on("input", function() { minRate = parseFloat(this.value) / 100; onChange(); })
 d3.select("#maxRate").attr("value", (maxRate * 100).toFixed(2))
   .on("input", function() { maxRate = parseFloat(this.value) / 100; onChange(); })
+
+var stackedBar = new StackedBar("#stackedBar", {
+  keyName: "month",
+  yLabel: "Amortization",
+  sort: false,
+  x: w + detailsMargin + detailsWidth,
+  y: 0,
+  width: _window.width - w - detailsMargin - detailsWidth - 5,
+  height: h,
+  labelXEvery: 12
+});
 
 function draw() {
   var rects = d3.select("#rects").selectAll("rect")
@@ -86,7 +108,22 @@ function mouseover(d) {
   var details = d3.select("#details");
   details.selectAll("*").remove();
   details.text(getDetails(d));
-  wrap(details, detailsWidth)
+  wrap(details, detailsWidth);
+
+  // amoritation chart
+  var amort = [];
+  var principalRemaining = getPrincipal(d), rate = getRate(d);
+  var payment = getPayment(principalRemaining, rate, months);
+  for (var i = 0; i < months; ++i) {
+    var interest = rate / 12 * principalRemaining;
+    amort[i] = {
+      month: i + 1,
+      principal: payment - interest,
+      interest: interest
+    };
+    principalRemaining -= amort[i].principal;
+  }
+  stackedBar.data(amort);
 }
 
 function onChange() {
