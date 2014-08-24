@@ -5,7 +5,7 @@ var w = 400,
     y = h / z;
 
 var minPrincipal = 0, maxPrincipal = 1000000;
-var minRate = 0, maxRate = .07;
+var minRate = 0.03, maxRate = 0.07;
 var months = 360;
 var maxPayment = getPayment(maxPrincipal, maxRate, months);
 var minPayment = 0;
@@ -21,16 +21,14 @@ d3.select("#details")
   .attr("x", w + detailsMargin)
   .attr("y", detailsMargin)
 
-d3.select("#minPrincipal").attr("value", 0)
-  .on("input", function() { minPrincipal = parseInt(this.value); })
+d3.select("#minPrincipal").attr("value", minPrincipal)
+  .on("input", function() { minPrincipal = parseInt(this.value); onChange(); })
 d3.select("#maxPrincipal").attr("value", maxPrincipal)
-  .on("input", function() { maxPrincipal = parseInt(this.value); })
-d3.select("#minRate").attr("value", 0)
-  .on("input", function() { minRate = parseFloat(this.value) / 100; })
+  .on("input", function() { maxPrincipal = parseInt(this.value); onChange(); })
+d3.select("#minRate").attr("value", (minRate * 100).toFixed(2))
+  .on("input", function() { minRate = parseFloat(this.value) / 100; onChange(); })
 d3.select("#maxRate").attr("value", (maxRate * 100).toFixed(2))
-  .on("input", function() { maxRate = parseFloat(this.value) / 100; })
-
-d3.select(".mortVar").on("input", onChange);
+  .on("input", function() { maxRate = parseFloat(this.value) / 100; onChange(); })
 
 function draw() {
   var rects = d3.select("#rects").selectAll("rect")
@@ -43,7 +41,6 @@ function draw() {
     .attr("width", z)
     .attr("height", z)
     .on("mouseover", mouseover)
-    .on("dragstart", dragstart)
     .style("fill", fill);
 
   rects.exit().remove();
@@ -73,7 +70,7 @@ function expand(d) {
 function getDetails(d) {
   var principal = getPrincipal(d);
   var rate = getRate(d);
-  return "$" + principal +
+  return "$" + principal.toFixed(2) +
     " @" + (rate*100).toFixed(2) + "% $" +
     getPayment(principal, rate, months).toFixed(0) + "/mo"
 }
@@ -90,10 +87,6 @@ function mouseover(d) {
   details.selectAll("*").remove();
   details.text(getDetails(d));
   wrap(details, detailsWidth)
-}
-
-function dragstart(e) {
-  e.foo;
 }
 
 function onChange() {
