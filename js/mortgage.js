@@ -69,7 +69,7 @@ var stackedBar = new StackedBar("#stackedBar", {
 
 function draw() {
   var rects = d3.select("#rects").selectAll("rect")
-    .data(d3.range(x * y));
+    .data(d3.range(x * y + 1));
 
   rects.style("fill", fill);
 
@@ -107,13 +107,13 @@ function expand(d) {
 function getDetails(d) {
   var principal = getPrincipal(d);
   var rate = getRate(d);
-  return "$" + principal.toFixed(2) +
+  return "$" + principal.toFixed(0) +
     " @" + (rate*100).toFixed(2) + "% $" +
     getPayment(principal, rate, termYears * 12).toFixed(0) + "/mo"
 }
 
 function getPrincipal(d) {
-  return (d % x / x * (maxPrincipal - minPrincipal)) + minPrincipal;
+  return ((d % x + 1) / x * (maxPrincipal - minPrincipal)) + minPrincipal;
 }
 function getRate(d) {
   return (Math.floor(d / x) / y * (maxRate - minRate)) + minRate;
